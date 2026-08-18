@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BunkerMate | Smart Attendance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons for premium feel -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <!-- Dynamic Classroom Scene -->
+    <div class="academic-background">
+        <div class="bg-scene"></div>
+        <div class="floating-elements" id="floating-elements">
+            <!-- Floating icons will be injected here via CSS/JS -->
+        </div>
+    </div>
+    <div class="container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-branding">
+                <h1 class="logo-text">Bunker<span>Mate</span></h1>
+                <p class="tagline">You can still save yourself and maintain 75%</p>
+                <p id="current-date" class="header-date">Today, Saturday, March 14, 2026</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-coffee" id="coffee-btn" title="Support the Developer">
+                    <i data-lucide="coffee"></i> Buy Me a Coffee
+                </button>
+                <button class="btn btn-primary btn-glow btn-vivid" id="add-subject-btn">
+                    <i data-lucide="plus-circle"></i> Enroll Subject
+                </button>
+                <button class="icon-btn-bordered" id="settings-btn" title="Settings">
+                    <i data-lucide="settings"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Section -->
+        <section class="stats-overview">
+            <div class="stats-row">
+                <div class="glass-card stat-card">
+                    <span class="stat-lbl">OVERALL ATTENDANCE</span>
+                    <div class="stat-val" id="overall-percentage">0%</div>
+                    <div class="mini-progress-track">
+                        <div class="mini-progress-fill" id="overall-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="glass-card stat-card">
+                    <span class="stat-lbl">GOAL PERCENTAGE</span>
+                    <div class="stat-val">75%</div>
+                    <span class="stat-sub">MINIMUM MANDATORY</span>
+                </div>
+                <div class="glass-card stat-card">
+                    <span class="stat-lbl">TOP PERFORMER</span>
+                    <div class="stat-val" id="top-subject">--</div>
+                    <span class="stat-sub" id="top-subject-count">0/0 CLASSES</span>
+                </div>
+                <div class="glass-card stat-card highlight-card">
+                    <span class="stat-lbl">CURRENT BUNKABLE</span>
+                    <div class="stat-val highlight" id="bunkable-classes">0</div>
+                    <span class="stat-sub">SAFE BUNKING AVAILABLE</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subjects Section -->
+        <section class="subjects-section">
+            <h2 class="section-title">Subjects</h2>
+            <div class="subject-grid" id="subject-list">
+                <!-- Subjects will be injected here -->
+            </div>
+        </section>
+
+        <!-- Dashboard Footer -->
+        <footer class="dashboard-footer">
+            <p class="footer-credit">BunkerMate • Crafted for students with <i data-lucide="heart"
+                    class="heart-icon"></i></p>
+        </footer>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div class="modal-overlay" id="add-modal">
+        <div class="glass-morphism modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">New Subject</h3>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <form id="add-subject-form">
+                <div class="form-group">
+                    <label class="form-label" for="subject-name">Subject Name</label>
+                    <input type="text" id="subject-name" class="form-input" placeholder="e.g. Mathematics II" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="subject-hours">Weekly Lecture Hours</label>
+                    <input type="number" id="subject-hours" class="form-input" value="4" min="1" max="50" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Lecture Days</label>
+                    <div class="days-selector">
+                        <label class="day-checkbox"><input type="checkbox" name="lecture-day" value="1"> Mon</label>
+                        <label class="day-checkbox"><input type="checkbox" name="lecture-day" value="2"> Tue</label>
+                        <label class="day-checkbox"><input type="checkbox" name="lecture-day" value="3"> Wed</label>
+                        <label class="day-checkbox"><input type="checkbox" name="lecture-day" value="4"> Thu</label>
+                        <label class="day-checkbox"><input type="checkbox" name="lecture-day" value="5"> Fri</label>
+                        <label class="day-checkbox"><input type="checkbox" name="lecture-day" value="6"> Sat</label>
+                        <label class="day-checkbox"><input type="checkbox" name="lecture-day" value="0"> Sun</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="subject-start-date">Start Date</label>
+                        <input type="date" id="subject-start-date" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="subject-end-date">End Date</label>
+                        <input type="date" id="subject-end-date" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 0.5rem;">
+                    <label class="form-label">Starting Counts (Optional)</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.8rem; opacity: 0.7;">Attended</label>
+                            <input type="number" id="subject-attended" class="form-input" value="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.8rem; opacity: 0.7;">Missed</label>
+                            <input type="number" id="subject-missed" class="form-input" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Create Subject
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay" id="history-modal">
+        <div class="glass-morphism modal-content history-modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="history-title">Attendance History</h3>
+                <button class="close-btn"
+                    onclick="document.getElementById('history-modal').classList.remove('active')">&times;</button>
+            </div>
+            <div id="history-content">
+                <!-- Logs will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="glass-morphism modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Settings</h3>
+                <button class="close-btn"
+                    onclick="document.getElementById('settings-modal').classList.remove('active')">&times;</button>
+            </div>
+
+            <div class="setting-item theme-section-optimized">
+                <style>
+                    .theme-section-optimized {
+                        display: flex;
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                    }
+
+                    .theme-grid {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 1rem;
+                        margin-top: 1.5rem;
+                    }
+
+                    .theme-card {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.8rem;
+                        padding: 1.25rem 0.5rem;
+                        background: rgba(255, 255, 255, 0.03);
+                        border: 1px solid var(--glass-border);
+                        border-radius: 16px;
+                        cursor: pointer;
+                        transition: var(--transition);
+                        color: var(--text-secondary);
+                    }
+
+                    .theme-card i {
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    .theme-card span {
+                        font-size: 0.8rem;
+                        font-weight: 700;
+                    }
+
+                    .theme-card:hover {
+                        background: rgba(255, 255, 255, 0.08);
+                        transform: translateY(-3px);
+                    }
+
+                    .theme-card.active {
+                        background: var(--accent-blue);
+                        color: white;
+                        border-color: var(--accent-blue);
+                        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+                    }
+
+                    [data-theme="light"] .theme-card {
+                        background: rgba(0, 0, 0, 0.03);
+                    }
+                </style>
+                <div class="setting-info" style="text-align: left;">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 4px;">Appearance Mode</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Select your preferred visual style</p>
+                </div>
+                <div class="theme-grid">
+                    <div class="theme-card" data-theme="light">
+                        <i data-lucide="sun"></i>
+                        <span>Light</span>
+                    </div>
+                    <div class="theme-card active" data-theme="dark">
+                        <i data-lucide="moon"></i>
+                        <span>Dark</span>
+                    </div>
+                    <div class="theme-card" data-theme="system">
+                        <i data-lucide="monitor"></i>
+                        <span>System</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div>
+                    <h4 style="margin-bottom: 4px;">Browser Scaling</h4>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary);">Optimize for 90% scaling</p>
+                </div>
+                <label class="day-checkbox">
+                    <input type="checkbox" id="scaling-toggle"> Apply Fix
+                </label>
+            </div>
+
+            <div
+                style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-secondary); font-size: 0.8rem;">
+                BunkerMate v2.0 • Smart Attendance Tracker
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Developer / Buy Me a Coffee Modal -->
+    <div class="modal-overlay" id="coffee-modal">
+        <div class="glass-morphism modal-content coffee-modal-content">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <h3 class="modal-title" style="display: flex; align-items: center; gap: 0.6rem;">
+                        <span class="coffee-icon-badge"><i data-lucide="coffee"></i></span> Buy Me a Coffee
+                    </h3>
+                    <p class="modal-subtitle">Support the developer to keep BunkerMate fast, free & updated!</p>
+                </div>
+                <button class="close-btn" id="close-coffee-modal">&times;</button>
+            </div>
+
+            <div class="coffee-modal-body">
+                <!-- QR Code Display Card -->
+                <div class="qr-card">
+                    <div class="qr-card-header">
+                        <span class="payee-badge">
+                            <i data-lucide="shield-check" class="shield-icon"></i> Verified UPI Payee
+                        </span>
+                    </div>
+
+                    <div class="qr-frame">
+                        <img src="upi_qr.svg" alt="UPI QR Code - nsb566@oksbi" class="qr-image" id="upi-qr-img">
+                    </div>
+
+                    <div class="qr-instruction">
+                        <div class="qr-target-id">
+                            <span class="qr-id-label">Pay to:</span>
+                            <span class="qr-id-value">nsb566@oksbi</span>
+                        </div>
+                        <span class="upi-badge"><i data-lucide="scan"></i> Scan with any UPI App</span>
+                        <span class="upi-apps-icons">GPay • PhonePe • Paytm • BHIM • Cred</span>
+                    </div>
+                </div>
+
+                <!-- UPI Details Box -->
+                <div class="upi-details-card">
+                    <div class="form-group" style="margin-bottom: 1.2rem;">
+                        <label class="form-label" style="margin-bottom: 0.5rem;">Direct UPI ID</label>
+                        <div class="upi-copy-box">
+                            <div class="upi-id-badge">
+                                <i data-lucide="wallet"></i>
+                                <input type="text" id="upi-id-input" value="nsb566@oksbi" readonly class="upi-id-text">
+                            </div>
+                            <button type="button" class="btn btn-copy" id="copy-upi-btn" title="Copy UPI ID">
+                                <i data-lucide="copy" id="copy-icon"></i>
+                                <span id="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preset Amount Selector -->
+                    <div class="form-group" style="margin-bottom: 1.2rem;">
+                        <label class="form-label" style="margin-bottom: 0.5rem;">Select Amount</label>
+                        <div class="amount-presets">
+                            <button type="button" class="amount-chip" data-amount="30">₹30</button>
+                            <button type="button" class="amount-chip active" data-amount="50">☕ ₹50</button>
+                            <button type="button" class="amount-chip" data-amount="100">₹100</button>
+                            <button type="button" class="amount-chip" data-amount="200">₹200</button>
+                        </div>
+                    </div>
+
+                    <!-- Quick App Chooser -->
+                    <div class="form-group" style="margin-bottom: 1.2rem;">
+                        <label class="form-label" style="margin-bottom: 0.5rem;">Choose App to Pay</label>
+                        <div class="upi-apps-grid">
+                            <button type="button" class="upi-app-btn" data-scheme="gpay" title="Google Pay">
+                                <span class="app-icon-circle gpay-icon">G</span>
+                                <span class="app-name">GPay</span>
+                            </button>
+                            <button type="button" class="upi-app-btn" data-scheme="phonepe" title="PhonePe">
+                                <span class="app-icon-circle phonepe-icon">Pe</span>
+                                <span class="app-name">PhonePe</span>
+                            </button>
+                            <button type="button" class="upi-app-btn" data-scheme="paytm" title="Paytm">
+                                <span class="app-icon-circle paytm-icon">Pay</span>
+                                <span class="app-name">Paytm</span>
+                            </button>
+                            <button type="button" class="upi-app-btn" data-scheme="bhim" title="BHIM UPI">
+                                <span class="app-icon-circle bhim-icon">BHIM</span>
+                                <span class="app-name">BHIM</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Direct Universal Mobile Pay Button -->
+                    <button type="button" id="direct-upi-btn" class="btn btn-pay-upi" style="width: 100%;">
+                        <i data-lucide="smartphone"></i> Pay via Any UPI App
+                    </button>
+                    <p class="direct-pay-hint">Redirects directly to any UPI app installed on your device</p>
+
+                    <!-- Safe Redirection Notice -->
+                    <div class="upi-security-notice">
+                        <i data-lucide="shield-check"></i>
+                        <div>
+                            <strong>Safe Redirection:</strong> If your browser prompts to <em>"access other apps and
+                                services"</em>, please choose <strong>Allow</strong> — this is standard browser security
+                            to safely open your chosen UPI payment app.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="coffee-modal-footer">
+                <p>Funds go directly & safely to <strong>nsb566@oksbi</strong> via SBI UPI network. ❤️</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div id="toast"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
