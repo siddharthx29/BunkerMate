@@ -46,5 +46,5 @@ If BunkerMate helped you maintain your 75% attendance and save your semester, co
 </div>
 
 ---
-*BunkerMate - Miss classes, but stay safe at 75%.* • https://bunkermate.teamnexterp.com/
+*BunkerMate - Miss classes, but stay safe at 75%.* • https://bunkermate.app/
 
